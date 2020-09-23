@@ -6,6 +6,7 @@ const EventEmitter = require('events').EventEmitter;
 const spawn = require('child_process').spawn;
 const path = require('path');
 const fs = require('fs');
+const { defaultMaxListeners } = require('stream');
 
 // @ts-check
 
@@ -189,18 +190,47 @@ class Option {
     return this.short === arg || this.long === arg;
   };
 
-  static fromHash(details) {
-    const option = new Option(details.flags, details.description);
-    return option.initFromHash(details);
-  }
+  /**
+   * Factory method to make Option from a hash.
+   * If the flags key is present in details, the flags-derived keys are ignored.
+   */
+  static fromHash(details, Construct = this) {
+    const option = new Construct(details.flags || '', details.description);
 
-  initFromHash(details) {
-    Object.prototype.hasOwnProperty.call(details, 'defaultValue') && this.default(details.defaultValue, details.defaultValueDescription);
-    Object.prototype.hasOwnProperty.call(details, 'parseArg') && this.argParser(details.parseArg);
-    Object.prototype.hasOwnProperty.call(details, 'mandatory') && this.makeOptionMandatory(details.mandatory);
-    Object.prototype.hasOwnProperty.call(details, 'hidden') && this.hideHelp(details.hidden);
-    Object.prototype.hasOwnProperty.call(details, 'choices') && this.choices(details.choices);
-    return this;
+    // Support hash without flags, build flags from pieces.
+    if (!details.flags) {
+      // negate?
+      let flags;
+      if (details.short && details.long) {
+        flags = `${details.short}, ${details.long}`;
+      } else {
+        flags = details.long ? details.long : details.short;
+      }
+      const value = details.variadic ? 'value...' : 'value';
+      if (details.required) {
+        flags = `${flags} <${value}>`;
+      } if (details.optional) {
+        flags = `${flags} [${value}]`;
+      }
+      option.flags = flags;
+
+      option.short = details.short;
+      option.long = details.long;
+      option.required = details.required;
+      option.optional = details.optional;
+      option.variadic = details.variadic;
+      option.negate = details.negate;
+    }
+
+    // The properties not derived from flags.
+    option.defaultValue = details.defaultValue;
+    option.defaultValueDescription = details.defaultValueDescription;
+    option.parseArg = details.parseArg;
+    option.mandatory = !!details.mandatory;
+    option.hidden = !!details.hidden;
+    details.choices && option.choices(details.choices);
+
+    return option;
   }
 }
 
