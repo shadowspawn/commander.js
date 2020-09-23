@@ -188,6 +188,20 @@ class Option {
   is(arg) {
     return this.short === arg || this.long === arg;
   };
+
+  static fromHash(details) {
+    const option = new Option(details.flags, details.description);
+    return option.initFromHash(details);
+  }
+
+  initFromHash(details) {
+    Object.prototype.hasOwnProperty.call(details, 'defaultValue') && this.default(details.defaultValue, details.defaultValueDescription);
+    Object.prototype.hasOwnProperty.call(details, 'parseArg') && this.argParser(details.parseArg);
+    Object.prototype.hasOwnProperty.call(details, 'mandatory') && this.makeOptionMandatory(details.mandatory);
+    Object.prototype.hasOwnProperty.call(details, 'hidden') && this.hideHelp(details.hidden);
+    Object.prototype.hasOwnProperty.call(details, 'choices') && this.choices(details.choices);
+    return this;
+  }
 }
 
 /**
@@ -337,6 +351,17 @@ class Command extends EventEmitter {
   createCommand(name) {
     return new Command(name);
   };
+
+  /**
+   * Factory routine to create a new unattached option.
+   *
+   * See .option() for creating an attached option, which uses this routine to
+   * create the option.
+
+   */
+  createOption(flags, description) {
+    return new Option(flags, description);
+  }
 
   /**
    * Add a prepared subcommand.
