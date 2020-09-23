@@ -383,17 +383,6 @@ class Command extends EventEmitter {
   };
 
   /**
-   * Factory routine to create a new unattached option.
-   *
-   * See .option() for creating an attached option, which uses this routine to
-   * create the option.
-
-   */
-  createOption(flags, description) {
-    return new Option(flags, description);
-  }
-
-  /**
    * Add a prepared subcommand.
    *
    * See .command() for creating an attached subcommand which inherits settings from its parent.
