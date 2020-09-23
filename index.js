@@ -6,7 +6,6 @@ const EventEmitter = require('events').EventEmitter;
 const spawn = require('child_process').spawn;
 const path = require('path');
 const fs = require('fs');
-const { defaultMaxListeners } = require('stream');
 
 // @ts-check
 
