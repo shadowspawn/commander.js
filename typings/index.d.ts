@@ -24,7 +24,6 @@ export class CommanderError extends Error {
    * @param exitCode - suggested exit code which could be used with process.exit
    * @param code - an id string representing the error
    * @param message - human-readable description of the error
-   * @constructor
    */
   constructor(exitCode: number, code: string, message: string);
 }
@@ -33,7 +32,6 @@ export class InvalidArgumentError extends CommanderError {
   /**
    * Constructs the InvalidArgumentError class
    * @param message - explanation of why argument is invalid
-   * @constructor
    */
   constructor(message: string);
 }
@@ -317,7 +315,6 @@ export class Command {
   /**
    * Define a command, implemented using an action handler.
    *
-   * @remarks
    * The command description is supplied using `.description`, not as a parameter to `.command`.
    *
    * @example
@@ -338,7 +335,6 @@ export class Command {
   /**
    * Define a command, implemented in a separate executable file.
    *
-   * @remarks
    * The command description is supplied as the second parameter to `.command`.
    *
    * @example
@@ -598,7 +594,7 @@ export class Command {
   getOptionValueSource(key: string): OptionValueSource | undefined;
 
   /**
-    * Get source of option value. See also .optsWithGlobals().
+   * Get source of option value. See also .optsWithGlobals().
    */
   getOptionValueSourceWithGlobals(key: string): OptionValueSource | undefined;
 
