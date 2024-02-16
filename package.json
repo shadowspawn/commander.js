@@ -21,7 +21,7 @@
   "scripts": {
     "lint": "npm run lint:javascript && npm run lint:typescript",
     "lint:javascript": "eslint index.js esm.mjs \"lib/*.js\" \"tests/**/*.js\"",
-    "lint:typescript": "eslint typings/*.ts tests/*.ts",
+    "lint:typescript": "eslint typings/*.ts tests/**/*.ts",
     "check": "npm run check:format",
     "check:format": "prettier --check .",
     "test": "jest && npm run typecheck:ts",
