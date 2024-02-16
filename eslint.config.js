@@ -5,7 +5,7 @@ const prettier = require('eslint-config-prettier');
 const tseslint = require('typescript-eslint');
 
 
-// const jsdoc = require('eslint-plugin-jsdoc');
+const jsdoc = require('eslint-plugin-jsdoc');
 const { FlatCompat } = require('@eslint/eslintrc'); // For reading original (non-flat) configs into flat format.
 
 // Jest is in process of updating for flat config support, so mixture of approaches.
@@ -13,14 +13,16 @@ const { FlatCompat } = require('@eslint/eslintrc'); // For reading original (non
 
 module.exports = [
   esLintjs.configs.recommended,
-  // jsdoc.configs['flat/recommended'],
+  jsdoc.configs['flat/recommended'],
   {
     files: ['**/*.{js,mjs,cjs}', '**/*.{ts,mts,cts}'],
     rules: {
       'no-unused-vars': 'off', // lots in tests, minimise churn to start with
       'no-else-return': ['error', { allowElseIf: false }],
-      // 'jsdoc/tag-lines': 'off',
-      // 'jsdoc/require-jsdoc': 'off',
+      'jsdoc/tag-lines': 'off',
+      'jsdoc/require-jsdoc': 'off',
+      'jsdoc/require-param-description': 'off',
+      'jsdoc/require-returns-description': 'off',
     },
     languageOptions: {
       globals: {
